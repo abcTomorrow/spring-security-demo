@@ -1,6 +1,7 @@
 package com.wojiushiwo.spring.security.demo.config;
 
 import com.wojiushiwo.spring.security.demo.handler.MySuccessHandler;
+import com.wojiushiwo.spring.security.demo.service.MyRBACService;
 import com.wojiushiwo.spring.security.demo.service.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -37,11 +38,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/login.html", "/login").permitAll()//不需要通过登录验证就可以被访问的资源路径
-                .antMatchers("/biz1", "/biz2") //需要对外暴露的资源路径
-                .hasAnyAuthority("ROLE_user", "ROLE_admin")  //user角色和admin角色都可以访问
-                .antMatchers("/syslog").hasAuthority("/sys_log")
-                .antMatchers("/sysuser").hasAuthority("/sys_user")
-                .anyRequest().authenticated()
+                .antMatchers("/index").authenticated()
+                .anyRequest().access("@myRBACService.hasPermission(request,authentication)") //使用权限表达式 进行鉴权
+//                .anyRequest().authenticated()
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
@@ -81,6 +80,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         //将项目中静态资源路径开放出来
-        web.ignoring().antMatchers("/css/**", "/fonts/**", "/img/**", "/js/**");
+        web.ignoring().antMatchers("/css/**", "/fonts/**", "/img/**", "/js/**", "**/favicon.ico");
     }
 }
