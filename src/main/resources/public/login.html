@@ -7,10 +7,21 @@
 <body>
 <h1>业务系统登录</h1>
 <form action="/login" method="post">
-    <span>用户名称</span><input type="text" name="username" /> <br>
-    <span>用户密码</span><input type="password" name="password" /> <br>
+    <span>用户名称</span><input type="text" name="username"/> <br>
+    <span>用户密码</span><input type="password" name="password"/><br>
+    <span>验证码</span><input type="text" name="captchaCode" id="captchaCode"/>
+    <img src="/kaptcha" id="kaptcha" width="110px" height="40px"/>
+    <br>
     <input type="submit" value="登陆">
 </form>
 
+<script>
+    window.onload = function () {
+        var kaptchaImg = document.getElementById("kaptcha");
+        kaptchaImg.onclick = function () {
+            kaptchaImg.src = "/kaptcha?" + Math.floor(Math.random() * 100)
+        }
+    }
+</script>
 </body>
 </html>

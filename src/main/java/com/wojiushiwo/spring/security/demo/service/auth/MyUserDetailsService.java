@@ -1,4 +1,4 @@
-package com.wojiushiwo.spring.security.demo.service;
+package com.wojiushiwo.spring.security.demo.service.auth;
 
 import com.wojiushiwo.spring.security.demo.mapper.MyUserDetailsMapper;
 import com.wojiushiwo.spring.security.demo.model.MyUserDetails;

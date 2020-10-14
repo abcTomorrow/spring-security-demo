@@ -1,9 +1,9 @@
 package com.wojiushiwo.spring.security.demo.config;
 
+import com.wojiushiwo.spring.security.demo.auth.filter.CaptchaCodeFilter;
 import com.wojiushiwo.spring.security.demo.handler.MyLogoutSuccessHandler;
 import com.wojiushiwo.spring.security.demo.handler.MySuccessHandler;
-import com.wojiushiwo.spring.security.demo.service.MyRBACService;
-import com.wojiushiwo.spring.security.demo.service.MyUserDetailsService;
+import com.wojiushiwo.spring.security.demo.service.auth.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +15,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
  * @author wojiushiwo
@@ -31,9 +32,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private MyUserDetailsService myUserDetailsService;
 
+    @Autowired
+    private CaptchaCodeFilter captchaCodeFilter;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.logout()
+        //在UsernamePasswordAuthenticationFilter过滤器前加上验证码过滤器
+        http.addFilterBefore(captchaCodeFilter, UsernamePasswordAuthenticationFilter.class)
+                .logout()
                 .logoutUrl("/myLogout")//自定义登出url，默认是/logout
                 .deleteCookies("JSESSIONID")//登出时 删除指定名称的cookie
 //                .logoutSuccessUrl("/logout.html")//指定登出后跳转的页面，l默认是oginPage配置项指定的页面
@@ -47,7 +53,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .defaultSuccessUrl("/index")//登录认证成功后默认转跳的路径
                 .and()
                 .authorizeRequests()
-                .antMatchers("/login.html", "/login","/logout.html").permitAll()//不需要通过登录验证就可以被访问的资源路径
+                .antMatchers("/login.html", "/login", "/logout.html","/kaptcha").permitAll()//不需要通过登录验证就可以被访问的资源路径
                 .antMatchers("/index").authenticated()
                 .anyRequest().access("@myRBACService.hasPermission(request,authentication)") //使用权限表达式 进行鉴权
 //                .anyRequest().authenticated()
