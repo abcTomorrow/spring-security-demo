@@ -19,7 +19,8 @@ public class MySuccessHandler extends SavedRequestAwareAuthenticationSuccessHand
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws ServletException, IOException {
-        response.setContentType("application/json;charset=UTF-8");
-        response.getWriter().write(objectMapper.writeValueAsString("OK"));
+//        response.setContentType("application/json;charset=UTF-8");
+//        response.getWriter().write(objectMapper.writeValueAsString("OK"));
+        super.onAuthenticationSuccess(request, response, authentication);
     }
 }

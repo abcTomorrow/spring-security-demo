@@ -47,4 +47,12 @@ public interface MyUserDetailsMapper {
     })
     List<String> findAuthorityByRoleCodes(@Param("roleCodes") List<String> roleCodes);
 
+
+    /**
+     * 根据mobile查询用户信息
+     *
+     * @param mobile
+     * @return
+     */
+    MyUserDetails findByUserMobile(String mobile);
 }

@@ -9,5 +9,7 @@ package com.wojiushiwo.spring.security.demo.constants;
 public class MyConstants {
 
     public static final String CAPATCHA_SESSION_KEY = "imageCode";
+    public static final String SMS_CODE_SESSION_KEY = "sms_key";
+
 
 }

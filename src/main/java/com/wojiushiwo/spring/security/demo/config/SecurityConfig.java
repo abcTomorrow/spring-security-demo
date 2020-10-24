@@ -4,6 +4,7 @@ import com.wojiushiwo.spring.security.demo.auth.filter.CaptchaCodeFilter;
 import com.wojiushiwo.spring.security.demo.handler.MyLogoutSuccessHandler;
 import com.wojiushiwo.spring.security.demo.handler.MySuccessHandler;
 import com.wojiushiwo.spring.security.demo.service.auth.MyUserDetailsService;
+import com.wojiushiwo.spring.security.demo.smscode.config.SmsCodeSecurityConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,16 +25,23 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    private static final String[] IGNORE_PATH = {
+            "/login.html",
+            "/login",
+            "/logout.html",
+            "/kaptcha",
+            "/smscode"};
     @Autowired
     private MySuccessHandler successHandler;
-
     @Autowired
     private MyLogoutSuccessHandler logoutSuccessHandler;
     @Autowired
     private MyUserDetailsService myUserDetailsService;
-
     @Autowired
     private CaptchaCodeFilter captchaCodeFilter;
+
+    @Autowired
+    private SmsCodeSecurityConfig smsCodeSecurityConfig;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -51,9 +59,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .usernameParameter("username")///登录表单form中用户名输入框input的name名，不修改的话默认是username
                 .passwordParameter("password")//form中密码输入框input的name名，不修改的话默认是password
                 .defaultSuccessUrl("/index")//登录认证成功后默认转跳的路径
+                .and().apply(smsCodeSecurityConfig)//添加短信验证过滤器配置
                 .and()
                 .authorizeRequests()
-                .antMatchers("/login.html", "/login", "/logout.html","/kaptcha").permitAll()//不需要通过登录验证就可以被访问的资源路径
+                .antMatchers(IGNORE_PATH).permitAll()//不需要通过登录验证就可以被访问的资源路径
                 .antMatchers("/index").authenticated()
                 .anyRequest().access("@myRBACService.hasPermission(request,authentication)") //使用权限表达式 进行鉴权
 //                .anyRequest().authenticated()

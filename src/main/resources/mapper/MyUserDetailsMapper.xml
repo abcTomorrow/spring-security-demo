@@ -9,4 +9,9 @@
         where username=#{userName};
     </select>
 
+    <select id="findByUserMobile" resultType="com.wojiushiwo.spring.security.demo.model.MyUserDetails">
+        select username,password,enabled
+        from sys_user
+        where phone=#{mobile};
+    </select>
 </mapper>
