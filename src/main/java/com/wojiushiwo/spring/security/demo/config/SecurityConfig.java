@@ -1,6 +1,7 @@
 package com.wojiushiwo.spring.security.demo.config;
 
 import com.wojiushiwo.spring.security.demo.auth.filter.CaptchaCodeFilter;
+import com.wojiushiwo.spring.security.demo.handler.MyAuthenticationFailureHandler;
 import com.wojiushiwo.spring.security.demo.handler.MyLogoutSuccessHandler;
 import com.wojiushiwo.spring.security.demo.handler.MySuccessHandler;
 import com.wojiushiwo.spring.security.demo.service.auth.MyUserDetailsService;
@@ -43,6 +44,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private SmsCodeSecurityConfig smsCodeSecurityConfig;
 
+    @Autowired
+    private MyAuthenticationFailureHandler failureHandler;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         //在UsernamePasswordAuthenticationFilter过滤器前加上验证码过滤器
@@ -59,6 +63,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .usernameParameter("username")///登录表单form中用户名输入框input的name名，不修改的话默认是username
                 .passwordParameter("password")//form中密码输入框input的name名，不修改的话默认是password
                 .defaultSuccessUrl("/index")//登录认证成功后默认转跳的路径
+                .failureHandler(failureHandler)
                 .and().apply(smsCodeSecurityConfig)//添加短信验证过滤器配置
                 .and()
                 .authorizeRequests()

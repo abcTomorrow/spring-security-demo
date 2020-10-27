@@ -1,6 +1,6 @@
 package com.wojiushiwo.spring.security.demo.smscode.config;
 
-import com.wojiushiwo.spring.security.demo.handler.MyAuthencationFailureHandler;
+import com.wojiushiwo.spring.security.demo.handler.MyAuthenticationFailureHandler;
 import com.wojiushiwo.spring.security.demo.handler.MySuccessHandler;
 import com.wojiushiwo.spring.security.demo.smscode.filter.SmsAuthenticationFilter;
 import com.wojiushiwo.spring.security.demo.smscode.filter.SmsCodeValidFilter;
@@ -30,7 +30,7 @@ public class SmsCodeSecurityConfig extends SecurityConfigurerAdapter<DefaultSecu
     private MySuccessHandler successHandler;
 
     @Autowired
-    private MyAuthencationFailureHandler failureHandler;
+    private MyAuthenticationFailureHandler failureHandler;
 
     @Autowired
     private SmsCodeValidFilter smsCodeValidFilter;

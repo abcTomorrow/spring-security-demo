@@ -3,6 +3,7 @@ package com.wojiushiwo.spring.security.demo.mapper;
 import com.wojiushiwo.spring.security.demo.model.MyUserDetails;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -55,4 +56,10 @@ public interface MyUserDetailsMapper {
      * @return
      */
     MyUserDetails findByUserMobile(String mobile);
+
+
+    @Update({" UPDATE sys_user u" +
+            "  SET u.enabled = #{enabled}" +
+            " WHERE u.username = #{username} or u.phone = #{username}"})
+    int updateEnabledByUsername(MyUserDetails myUserDetails);
 }

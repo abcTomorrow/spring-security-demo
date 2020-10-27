@@ -1,7 +1,7 @@
 package com.wojiushiwo.spring.security.demo.smscode.filter;
 
 import com.wojiushiwo.spring.security.demo.constants.MyConstants;
-import com.wojiushiwo.spring.security.demo.handler.MyAuthencationFailureHandler;
+import com.wojiushiwo.spring.security.demo.handler.MyAuthenticationFailureHandler;
 import com.wojiushiwo.spring.security.demo.mapper.MyUserDetailsMapper;
 import com.wojiushiwo.spring.security.demo.model.MyUserDetails;
 import com.wojiushiwo.spring.security.demo.smscode.dto.SmsCode;
@@ -17,7 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -31,7 +30,7 @@ public class SmsCodeValidFilter extends OncePerRequestFilter {
 
 
     @Autowired
-    private MyAuthencationFailureHandler failureHandler;
+    private MyAuthenticationFailureHandler failureHandler;
 
     @Autowired
     private MyUserDetailsMapper myUserDetailsMapper;
@@ -47,6 +46,7 @@ public class SmsCodeValidFilter extends OncePerRequestFilter {
                 this.validateSmsCode(request);
             } catch (AuthenticationException e) {
                 failureHandler.onAuthenticationFailure(request, response, e);
+                return;
             }
         }
 

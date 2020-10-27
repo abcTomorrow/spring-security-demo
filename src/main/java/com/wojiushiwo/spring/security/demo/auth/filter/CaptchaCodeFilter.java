@@ -1,7 +1,7 @@
 package com.wojiushiwo.spring.security.demo.auth.filter;
 
 import com.wojiushiwo.spring.security.demo.constants.MyConstants;
-import com.wojiushiwo.spring.security.demo.handler.MyAuthencationFailureHandler;
+import com.wojiushiwo.spring.security.demo.handler.MyAuthenticationFailureHandler;
 import com.wojiushiwo.spring.security.demo.model.CaptchaImageVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.AuthenticationException;
@@ -30,7 +30,7 @@ import java.util.Objects;
 public class CaptchaCodeFilter extends OncePerRequestFilter {
 
     @Autowired
-    private MyAuthencationFailureHandler authencationFailureHandler;
+    private MyAuthenticationFailureHandler authencationFailureHandler;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -43,7 +43,9 @@ public class CaptchaCodeFilter extends OncePerRequestFilter {
             } catch (AuthenticationException e) {
                 //捕获异常 交给失败处理类进行处理
                 authencationFailureHandler.onAuthenticationFailure(request, response, e);
+                return;
             }
+
         }
 
         //放行
