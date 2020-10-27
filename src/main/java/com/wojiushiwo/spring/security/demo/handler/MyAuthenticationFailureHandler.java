@@ -57,6 +57,7 @@ public class MyAuthenticationFailureHandler extends SimpleUrlAuthenticationFailu
                 //如果触发了锁定机制 通过UserDetails告知spring security锁定账户
                 MyUserDetails userDetails = (MyUserDetails) userDetailsService.loadUserByUsername(username);
                 userDetails.setAccountNonLocked(false);
+                //更新sys_user表enabled字段，该字段与accountNonLocked绑定 在登录时 会拉取到userDetails数据 会判断账户是否被锁定
                 myUserDetailsMapper.updateEnabledByUsername(userDetails);
             }
         }
